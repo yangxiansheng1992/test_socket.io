@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>聊天室</title>
+  <style>
+
+    ul{
+      width: 400px;
+      height: 350px;
+      overflow: auto;
+      border:1px solid;
+    }
+    ul>.me{
+      color:aquamarine;
+    }
+  </style>
+</head>
+<body>
+
+  <ul id="box">
+
+  </ul>
+  <textarea  id="text" cols="50" rows="8"></textarea>
+  <input type="button" value="发送" id="btn">
+</body>
+<script src="http://localhost:1992/socket.io/socket.io.js" charset="utf-8"></script>
+<script>
+  let oUl=document.getElementById('box');
+  let oText=document.getElementById('text');
+  let btn=document.getElementById('btn');
+  let sock=io.connect('ws://localhost:1992');
+
+  btn.onclick=function(){
+   sock.emit('msg',oText.value)
+   let oLi=document.createElement('li');
+    oLi.innerHTML=oText.value;
+    oLi.className='me'
+    oUl.appendChild(oLi);
+    oText.value='';
+  }
+sock.on('msg',(str)=>{
+  let oLi=document.createElement('li');
+  oLi.innerHTML=str;
+  oUl.appendChild(oLi);
+})
+</script>
+</html>
